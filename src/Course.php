@@ -13,6 +13,7 @@
             $this->number = $number;
         }
 
+        //Getters
         function getId()
         {
             return $this->id;
@@ -27,23 +28,6 @@
         {
             return $this->number;
         }
-
-        function setName($new_name)
-        {
-            $this->name = $new_name;
-        }
-
-        function setNumber($new_number)
-        {
-            $this->number = $new_number;
-        }
-
-        function save()
-        {
-            $GLOBALS['DB']->exec("INSERT INTO courses (name, number) VALUES ('{$this->getName()}', '{$this->getNumber()}');");
-            $this->id = $GLOBALS['DB']->lastInsertId();
-        }
-
 
         function getStudents()
         {
@@ -65,6 +49,46 @@
             return $students;
         }
 
+        //Setters
+        function setName($new_name)
+        {
+            $this->name = $new_name;
+        }
+
+        function setNumber($new_number)
+        {
+            $this->number = $new_number;
+        }
+
+        //Save function
+        function save()
+        {
+            $GLOBALS['DB']->exec("INSERT INTO courses (name, number) VALUES ('{$this->getName()}', '{$this->getNumber()}');");
+            $this->id = $GLOBALS['DB']->lastInsertId();
+        }
+
+        //Add function
+        function addStudent($student)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO students_courses (student_id, course_id) VALUES ({$student->getId()}, {$this->getId()});");
+        }
+
+        //Update function
+        function update($new_name, $new_number)
+        {
+            $GLOBALS['DB']->exec("UPDATE courses SET name = '{$new_name}', number = '{$new_number}' WHERE id = {$this->getID()};");
+            $this->setName($new_name);
+            $this->setNumber($new_number);
+        }
+
+        //Delete function
+        function delete()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM courses WHERE id = {$this->getId()};");
+            $GLOBALS['DB']->exec("DELETE FROM students_courses WHERE course_id = {$this->getId()};");
+        }
+
+        //Static functions
         static function getAll()
         {
             $returned_courses = $GLOBALS['DB']->query("SELECT * FROM courses");
@@ -85,5 +109,5 @@
         }
     }
 
-    //Still need: update, delete, addStudent
+    //Still need: delete
 ?>
