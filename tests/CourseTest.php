@@ -173,7 +173,7 @@
         function testUpdateCourse()
         {
             //Arrange
-            $id = 1;
+            $id = null;
             $name = "Intro to Math";
             $number = "MATH100";
             $test_course = new Course($id, $name, $number);
@@ -190,9 +190,30 @@
             $this->assertEquals($number2, $test_course->getNumber());
         }
 
+
+        function testDelete()
+        {
+            //Arrange
+            $id = null;
+            $name = "Intro to Math";
+            $number = "MATH100";
+            $test_course = new Course($id, $name, $number);
+            $test_course->save();
+
+            $id2 = null;
+            $name2 = "Math for Dummies";
+            $number2 = "MATH000";
+            $test_course2 = new Course($id2, $name2, $number2);
+            $test_course2->save();
+
+            //Act
+            $test_course2->delete();
+
+            //Assert
+            $this->assertEquals([$test_course], Course::getAll());
+        }
+
         
-
-
 
     }
 

@@ -28,6 +28,26 @@
             return $this->enrollment_date;
         }
 
+        function getCourses()
+        {
+            $query = $GLOBALS['DB']->query("SELECT course_id FROM students_courses WHERE student_id = {$this->getId()};");
+            $course_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $courses = array();
+            foreach ($course_ids as $id) {
+                $course_id = $id['course_id'];
+                $result = $GLOBALS['DB']->query("SELECT * FROM courses WHERE id = {$course_id};");
+                $returned_course = $result->fetchAll(PDO::FETCH_ASSOC);
+
+                $id = $returned_course[0]['id'];
+                $name = $returned_course[0]['name'];
+                $number = $returned_course[0]['number'];
+                $new_course = new Course($id, $name, $number);
+                array_push($courses, $new_course);
+            }
+            return $courses;
+        }
+
         function setName($new_name)
         {
             $this->name = $new_name;
@@ -49,7 +69,7 @@
             $GLOBALS['DB']->exec("UPDATE students SET name = '{$new_name}' WHERE id = {$this->getId()};");
             $this->setName($new_name);
         }
-        
+
         function delete()
         {
             $GLOBALS['DB']->exec("DELETE FROM students WHERE id = {$this->getId()};");
