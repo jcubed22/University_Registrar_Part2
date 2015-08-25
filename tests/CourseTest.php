@@ -213,7 +213,28 @@
             $this->assertEquals([$test_course], Course::getAll());
         }
 
-        
+        function testFind()
+        {
+            //Arrange
+            $id = null;
+            $name = "Intro to Math";
+            $number = "MATH100";
+            $test_course = new Course($id, $name, $number);
+            $test_course->save();
+
+            $id2 = null;
+            $name2 = "Math for Dummies";
+            $number2 = "MATH000";
+            $test_course2 = new Course($id2, $name2, $number2);
+            $test_course2->save();
+
+            //Act
+            $result = Course::find($test_course->getId());
+
+            //Assert
+            $this->assertEquals($test_course, $result);
+        }
+
 
     }
 

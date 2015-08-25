@@ -89,6 +89,21 @@
         }
 
         //Static functions
+
+        //Find Function
+        static function find($search_id)
+        {
+            $found_course = null;
+            $courses = Course::getAll();
+            foreach($courses as $course) {
+                $course_id = $course->getId();
+                if ($search_id == $course_id) {
+                    $found_course = $course;
+                }
+            }
+            return $found_course;
+        }
+
         static function getAll()
         {
             $returned_courses = $GLOBALS['DB']->query("SELECT * FROM courses");
@@ -107,7 +122,6 @@
         {
             $GLOBALS['DB']->exec("DELETE FROM courses;");
         }
+
     }
-
-
 ?>
