@@ -2,7 +2,7 @@
 
 ##### _An app for a University registrar_
 
-#### By _**Phil Shannon and Micah Courey**_
+#### By _**Micah Courey, Jordan Johansen, Phil Shannon, Kelli Sommerdyke**_
 
 ## Description
 
@@ -25,7 +25,7 @@ _PHP, MySQL, HTML, CSS, Silex, Twig, phpUnit_
 
 ### Legal
 
-Copyright (c) 2015 **_Phil Shannon and Micah Courey_**
+Copyright (c) 2015 **_Micah Courey, Jordan Johansen, Phil Shannon, Kelli Sommerdyke_**
 
 This software is licensed under the MIT license.
 
