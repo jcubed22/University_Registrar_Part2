@@ -31,18 +31,18 @@
 
         function getStudents()
         {
-            $query = $GLOBALS['DB']->query("SELECT student_id FROM students_courses WHERE course_id = {$this->getId()};");
-            $student_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+            $found_students = $GLOBALS['DB']->query(
+            "SELECT students.* FROM
+            courses JOIN students_courses ON (courses.id = students_courses.course_id)
+                    JOIN students ON (students_courses.student_id = students.id)
+            WHERE course_id = {$this->getId()};"
+            );
 
             $students = array();
-            foreach ($student_ids as $id) {
-                $student_id = $id['student_id'];
-                $result = $GLOBALS['DB']->query("SELECT * FROM students WHERE id = {$student_id};");
-                $returned_student = $result->fetchAll(PDO::FETCH_ASSOC);
-
-                $id = $returned_student[0]['id'];
-                $name = $returned_student[0]['name'];
-                $enrollment_date = $returned_student[0]['enrollment_date'];
+            foreach ($found_students as $student) {
+                $id = $student['id'];
+                $name = $student['name'];
+                $enrollment_date = $student['enrollment_date'];
                 $new_student = new Student($id, $name, $enrollment_date);
                 array_push($students, $new_student);
             }

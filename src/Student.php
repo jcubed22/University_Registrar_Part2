@@ -48,10 +48,6 @@
             return $courses;
         }
 
-
-
-
-
         //Setters
         function setName($new_name)
         {
