@@ -13,6 +13,7 @@
             $this->enrollment_date = $enrollment_date;
         }
 
+        //Getters
         function getId()
         {
             return $this->id;
@@ -30,24 +31,28 @@
 
         function getCourses()
         {
-            $query = $GLOBALS['DB']->query("SELECT course_id FROM students_courses WHERE student_id = {$this->getId()};");
-            $course_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+            $found_courses = $GLOBALS['DB']->query(
+            "SELECT courses.* FROM
+            students JOIN students_courses ON (students.id = students_courses.student_id)
+                     JOIN courses ON (students_courses.course_id = courses.id)
+            WHERE students.id = {$this->getId()};");
 
             $courses = array();
-            foreach ($course_ids as $id) {
-                $course_id = $id['course_id'];
-                $result = $GLOBALS['DB']->query("SELECT * FROM courses WHERE id = {$course_id};");
-                $returned_course = $result->fetchAll(PDO::FETCH_ASSOC);
-
-                $id = $returned_course[0]['id'];
-                $name = $returned_course[0]['name'];
-                $number = $returned_course[0]['number'];
+            foreach ($found_courses as $course) {
+                $id = $course['id'];
+                $name = $course['name'];
+                $number = $course['number'];
                 $new_course = new Course($id, $name, $number);
                 array_push($courses, $new_course);
             }
             return $courses;
         }
 
+
+
+
+
+        //Setters
         function setName($new_name)
         {
             $this->name = $new_name;
@@ -82,6 +87,7 @@
             $GLOBALS['DB']->exec("INSERT INTO students_courses (student_id, course_id) VALUES ({$this->getId()}, {$course->getId()});");
         }
 
+        //Static functions
         static function getAll()
         {
             $returned_students = $GLOBALS['DB']->query("SELECT * FROM students ORDER BY name");
@@ -114,8 +120,6 @@
             return $found_student;
         }
 
-
-        //Still need: getCourses
     }
 
 ?>
